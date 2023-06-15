@@ -1,0 +1,16 @@
+---
+title: "GRE - Laboratoire 3"
+author: "Farouk Ferchichi et Hugo Huart"
+format:
+    pdf:
+        fontsize: "12pt"
+---
+
+\pagebreak
+# Modélisation
+
+On crée un graphe orienté $G$ ayant les propriétés suivantes:
+
+* $n$ sommets correspondant aux $n$ vols.
+* Pour deux sommets $a$ et $b$, on crée un arc de $a$ à $b$ si il est possible d'utiliser le même
+avion pour le couple de vols $(a, b)$ correspondant.
