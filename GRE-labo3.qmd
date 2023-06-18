@@ -3,14 +3,53 @@ title: "GRE - Laboratoire 3"
 author: "Farouk Ferchichi et Hugo Huart"
 format:
     pdf:
-        fontsize: "12pt"
+        fontsize: "11pt"
+        geometry:
+            - top=3cm
+            - left=2cm
+            - right=2cm
+            - bottom=3cm
 ---
 
-\pagebreak
 # Modélisation
 
-On crée un graphe orienté $G$ ayant les propriétés suivantes:
+## Graphe principal
+
+On crée tout d'abord un graphe orienté $G$ avec:
 
 * $n$ sommets correspondant aux $n$ vols.
-* Pour deux sommets $a$ et $b$, on crée un arc de $a$ à $b$ si il est possible d'utiliser le même
-avion pour le couple de vols $(a, b)$ correspondant.
+* Un arc entre deux sommets $i$ et $j$ si il est possible d'utiliser le même
+avion pour le vol $i$ puis le vol $j$.
+
+On remarque dans ce graphe les propriétés suivantes:
+
+* Le graphe est **sans circuits**; un vol donné ne peut être effectué qu'une seule fois par un avion.
+* Le graphe n'est pas forcément connexe; il se peut qu'un vol soit totalement isolé des autres,
+au sens qu'il n'est pas possible d'utiliser son avion pour un autre vol.
+
+## Graphe auxiliaire
+
+À l'aide du graphe $G$, on crée un graphe auxiliaire **biparti** $G_c$ avec:
+
+* $2n$ sommets où pour chaque sommet $i$ de $G$, on place un sommet $i_a$ dans le premier sous-ensemble de la biparition et un sommet $i_b$ dans l'autre sous-ensemble.
+* Une arête entre deux sommets $i_a$ et $j_b$ si il existe un arc du sommet $i$ au sommet $j$ dans $G$.
+
+On remarque que $G_c$ ne peut pas être un graphe biparti complet de part sa construction vu que $G$ est lui-même
+un graphe sans circuits (on ne peut pas relier deux sommets $i_a$ et $i_b$).
+
+## Formulation et résolution du problème
+
+Le problème de la recherche du nombre minimal d'avions nécéssaires pour opérer les $n$ vols revient à trouver un **couplage maximum** dans le graphe $G_c$.
+En effet, un couplage maximum dans $G_c$ permet de maximiser le nombre de couples de vols tout en respectant la contrainte d'un avion par vol de part la nature des couplages.
+Maximiser le nombre de couples de vols revient à minimiser le nombre d'avions à utiliser étant donné qu'un avion est économisé pour chaque couple de vols compatibles retenu.
+
+On peut déterminer un couplage maximum dans $G_c$ avec l'algorithme (vu en cours) utilisant la recherche de chaînes augmentantes.
+
+Une fois un couplage maximum dans $G_c$ obtenu, on crée un graphe partiel $G_p$ de $G$ où pour chaque arête de $i_a$ à $j_b$ retenue dans le couplage maximum de $G_c$ on conserve l'arc correspondant de $i$ à $j$ de $G$ dans $G_p$, les autres arcs étant supprimés.
+
+### Solution
+
+Les suites de vols utilisant le même avion correspondent aux composantes connexes (leur plus long circuit) de $G_p$,
+si le sommet est seul dans sa composante connexe le vol correspondant utilise son propre appareil sans que celui-ci ne soit utilisé ailleurs ensuite.
+
+Le nombre minimal d'appareils nécéssaires correspond au **nombre de composantes connexes** de $G_p$.
